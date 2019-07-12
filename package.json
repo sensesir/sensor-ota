@@ -1,0 +1,11 @@
+{
+  "name": "gdoor-ota-server",
+  "version": "0.1.0",
+  "description": "Node.js express server to distribute firmware binaries for the GDoor sensor",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Josh Perry",
+  "license": "ISC"
+}
