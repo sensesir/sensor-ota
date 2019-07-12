@@ -5,6 +5,8 @@
 const axios = require('axios');
 const Constants = require('../Config/Constants');
 const fs = require('fs');
+const remote = true;
+const testURL = remote ? "http://ec2-34-244-89-155.eu-west-1.compute.amazonaws.com:3000/otaUpdate" : "http://0.0.0.0:3000/otaUpdate";
 
 const getOTAUpdate = async () => {
     console.log(`TEST: Getting OTA file`);
@@ -15,7 +17,7 @@ const getOTAUpdate = async () => {
             'x-api-key': Constants.API_KEY,
             'sensor-uid': 'SensorJPDev'
         },
-        url: 'http://0.0.0.0:3000/otaUpdate',
+        url: testURL,
         responseType: 'stream'
     }
     

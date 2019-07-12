@@ -42,7 +42,7 @@ app.get(Constants.ENDPOINT_OTA_UPDATE, async (req, res) => {
     await otaUpdate.otaUpdateSingleDevice(res, sensorUID);
 });
 
-app.listen(config.port, config.host, (e)=> {
+app.listen(config.port, null, (e)=> {
     if(e) {
         throw new Error('Internal Server Error');
     }

@@ -30,22 +30,6 @@ class OTAUpdate {
         const binFileData = binFile.Body;
         console.log(`API: Got firmware file from S3`);
   
-        /*
-        let readStream = new Stream.PassThrough();
-        readStream.end(binFileData.body);
-        readStream.pipe(res);
-        */
-
-        // Test stream function
-        /*
-        const textToSend = "The streamw works!";
-        let readStream = new Stream.Readable();
-        readStream._read = () => {};
-
-        readStream.push(textToSend);
-        readStream.pipe(res);
-        */
-
         let readStream = new Stream.Readable();
         readStream._read = () => {};
         readStream.push(binFileData);
