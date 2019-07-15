@@ -33,11 +33,13 @@ class OTAUpdate {
         let readStream = new Stream.Readable();
         readStream._read = () => {};
         readStream.push(binFileData);
+        readStream.push(null)
 
-        console.log(`API: Starting stream to sensor => ${sensorUID}`);
-        readStream.pipe(res);
+        readStream.on('end', () => { 
+            console.log(`OTA: Completed binary stream`);
+            res.end(); 
+        })
 
-        readStream.on('end', () => { console.log(`OTA: Completed binary stream`) })
         readStream.on('error', (error) => { 
             console.log(`OTA: Stream error ${error}`); 
             // TODO: handle
@@ -46,7 +48,10 @@ class OTAUpdate {
         // Temp
         readStream.on('data', (chunk) => {
             console.log(`Received ${chunk.length} bytes of data.`);
+            
         });
+
+        readStream.pipe(res);
     }
 };
 
