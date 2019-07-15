@@ -53,6 +53,26 @@ class OTAUpdate {
 
         readStream.pipe(res);
     }
+
+    async otaNonStream(res, sensorUID){
+        // Fetch latest version
+        const itemIdentifiers = {
+            TableName: Constants.TABLE_FIRMWARE_DISTRIBUTIONS,
+            Key: { release: "latest" }
+        };
+
+        const latestRelease = await getItem(itemIdentifiers);
+        const binFileName = latestRelease.binaryFileName;
+
+        // Fetch the file from S3
+        console.log(`OTA: Fetching binary file from S3`);
+        const binFile = await getFile(binFileName);
+        const binFileData = binFile.Body;
+        console.log(`API: Got firmware file from S3`);
+
+        // Simply send on
+        res.send(binFileData);
+    }
 };
 
 const getItem = (itemIdentifiers) => {

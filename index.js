@@ -42,6 +42,20 @@ app.get(Constants.ENDPOINT_OTA_UPDATE, async (req, res) => {
     await otaUpdate.otaUpdateSingleDevice(res, sensorUID);
 });
 
+app.get("/otaTest", async (req, res) => {
+    console.log(`INDEX: Received request to update OTA without header`);
+    const sensorUID = req.get('sensor-uid');
+    const otaUpdate = new OTAUpdate();
+    await otaUpdate.otaUpdateSingleDevice(res, sensorUID);
+});
+
+app.get("/otaNonStream", async (req, res) => {
+    console.log(`INDEX: Received request to update OTA without header`);
+    const sensorUID = req.get('sensor-uid');
+    const otaUpdate = new OTAUpdate();
+    await otaUpdate.otaNonStream(res, sensorUID);
+});
+
 app.listen(config.port, (e)=> {
     if(e) { throw new Error('Internal Server Error') }
     logger.info(`${config.name} running on port: ${config.port}`);
