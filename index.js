@@ -40,8 +40,8 @@ app.get(Constants.ENDPOINT_OTA_UPDATE, async (req, res) => {
     
     // Extract data from headers
     const sensorUID = req.get('sensor-uid');
-    const build = req.get('firmware-build');
-    const version = req.get('firmware-version');
+    const build = 1; // req.get('firmware-build');
+    const version = "1.1.0"; // req.get('firmware-version');
     
     const otaUpdate = new OTAUpdate();
     await otaUpdate.otaUpdateNonStream(res, sensorUID, build, version);
