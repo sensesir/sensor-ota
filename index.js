@@ -40,9 +40,14 @@ app.get(Constants.ENDPOINT_OTA_UPDATE, async (req, res) => {
     
     // Extract data from headers
     const sensorUID = req.get('sensor-uid');
-    const build = 1; // req.get('firmware-build');
-    const version = "1.1.0"; // req.get('firmware-version');
-    
+    const build = req.get('firmware-build');
+    const version = req.get('firmware-version');
+    if (!verifyDistRequest(build, version)) {
+        console.log(`INDEX: Invalid dist request. Build: ${build}, Version: ${version}`);
+        res.status(400).send("Bad build/version information in request");
+        return;
+    }
+
     const otaUpdate = new OTAUpdate();
     await otaUpdate.otaUpdateNonStream(res, sensorUID, build, version);
 });
@@ -60,4 +65,15 @@ const veryifAPI = (req) => {
         console.log(`INDEX: Incorrect API key => ${providedKey}`);
         return false;
     }
+}
+
+const verifyDistRequest = (build, version) => {
+    if (!(build && version)) { return false }
+    if (!(build.length && version.length)) { return false }
+
+    const buildNum = Number(build);
+    const majorVersion = Number(version.charAt(0));
+
+    if (buildNum > 0 && majorVersion > 0) { return true }
+    return false;
 }
