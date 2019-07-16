@@ -5,8 +5,8 @@
 const axios = require('axios');
 const Constants = require('../Config/Constants');
 const fs = require('fs');
-const remote = true;
-const testURL = remote ? "http://ec2-34-245-168-70.eu-west-1.compute.amazonaws.com:3000/otaUpdate" : "http://0.0.0.0:3000/otaUpdate";
+const remote = false;
+const testURL = remote ? "http://ec2-34-245-168-70.eu-west-1.compute.amazonaws.com:3000/otaUpdate" : "http://0.0.0.0:3000/otaUpdateNK";
 
 const getOTAUpdate = async () => {
     console.log(`TEST: Getting OTA file`);
@@ -14,8 +14,10 @@ const getOTAUpdate = async () => {
     const requestParams = {
         method: 'GET',
         headers: { 
-            'x-api-key': Constants.API_KEY,
-            'sensor-uid': 'SensorJPDev'
+            // 'x-api-key': Constants.API_KEY,
+            'sensor-uid': 'SensorJPDev',
+            'firmware-build': 1,
+            'firmware-version': "1.1.0"
         },
         url: testURL,
         responseType: 'stream'

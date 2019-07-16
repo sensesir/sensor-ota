@@ -14,15 +14,9 @@ const Stream = require('stream');
 
 
 class OTAUpdate {
-    async otaUpdateSingleDevice(res, sensorUID) {
-        // Fetch latest version
-        const itemIdentifiers = {
-            TableName: Constants.TABLE_FIRMWARE_DISTRIBUTIONS,
-            Key: { release: "latest" }
-        };
-
-        const latestRelease = await getItem(itemIdentifiers);
-        const binFileName = latestRelease.binaryFileName;
+    async otaUpdateStream(res, sensorUID, build=null, version=null) {
+        // Fetch distribution
+        const binFileName = await getBinFileName(build, version);
 
         // Fetch the file from S3
         console.log(`OTA: Fetching binary file from S3`);
@@ -51,19 +45,14 @@ class OTAUpdate {
             
         });
 
+        console.log(`OTA: Updating sensor => ${sensorUID}`);
         readStream.pipe(res);
     }
 
-    async otaNonStream(res, sensorUID){
-        // Fetch latest version
-        const itemIdentifiers = {
-            TableName: Constants.TABLE_FIRMWARE_DISTRIBUTIONS,
-            Key: { release: "latest" }
-        };
-
-        const latestRelease = await getItem(itemIdentifiers);
-        const binFileName = latestRelease.binaryFileName;
-
+    async otaUpdateNonStream(res, sensorUID, build=null, version=null){
+        // Fetch distribution
+        const binFileName = await getBinFileName(build, version);
+        
         // Fetch the file from S3
         console.log(`OTA: Fetching binary file from S3`);
         const binFile = await getFile(binFileName);
@@ -71,6 +60,7 @@ class OTAUpdate {
         console.log(`API: Got firmware file from S3`);
 
         // Simply send on
+        console.log(`OTA: Updating sensor => ${sensorUID}`);
         res.send(binFileData);
     }
 };
@@ -103,6 +93,29 @@ const getFile = (filename) => {
             return resolve(data);
         });
     });
+}
+
+const getBinFileName = async (build=null, version=null) => {
+    if (build && version) {
+        const itemIdentifiers = {
+            TableName: Constants.TABLE_FIRMWARE_DISTRIBUTIONS,
+            Key: { 
+                build: Number(build), 
+                version: version
+            }
+        };
+
+        const release = await getItem(itemIdentifiers);
+        const binFileName = release.binaryFileName;
+
+        if (!binFileName) { throw new Error('No binary file found for version & build specified') }
+        return binFileName;
+    } 
+    
+    else {
+        console.log(`OTA: No version or build speficied, fetching latest`);
+        // TODO
+    }
 }
 
 module.exports = OTAUpdate;
