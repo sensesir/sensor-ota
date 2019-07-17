@@ -48,8 +48,16 @@ app.get(Constants.ENDPOINT_OTA_UPDATE, async (req, res) => {
         return;
     }
 
-    const otaUpdate = new OTAUpdate();
-    await otaUpdate.otaUpdateNonStream(res, sensorUID, build, version);
+    try {
+        const otaUpdate = new OTAUpdate();
+        await otaUpdate.otaUpdateNonStream(res, sensorUID, build, version);
+    } catch(error) {
+        res.status(500);
+        res.send({
+            body: error.message,
+            stack: error.stack
+        });
+    }
 });
 
 app.listen(config.port, (e)=> {
