@@ -5,7 +5,7 @@
 const axios = require('axios');
 const Constants = require('../Config/Constants');
 const fs = require('fs');
-const remote = true;
+const remote = false;
 const testURL = remote ? "http://ec2-34-245-168-70.eu-west-1.compute.amazonaws.com:3000/otaUpdate" : "http://0.0.0.0:3000/otaUpdate";
 
 const getOTAUpdate = async () => {

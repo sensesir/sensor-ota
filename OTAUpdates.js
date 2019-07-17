@@ -106,9 +106,9 @@ const getBinFileName = async (build=null, version=null) => {
         };
 
         const release = await getItem(itemIdentifiers);
+        if (!release) { throw new Error('No binary file found for version & build specified') }
+        
         const binFileName = release.binaryFileName;
-
-        if (!binFileName) { throw new Error('No binary file found for version & build specified') }
         return binFileName;
     } 
     

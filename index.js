@@ -52,6 +52,8 @@ app.get(Constants.ENDPOINT_OTA_UPDATE, async (req, res) => {
         const otaUpdate = new OTAUpdate();
         await otaUpdate.otaUpdateNonStream(res, sensorUID, build, version);
     } catch(error) {
+        console.error(`INDEX Failed to server firmware bin => ${error.message}`);
+        console.error(error.stack);
         res.status(500);
         res.send({
             body: error.message,
