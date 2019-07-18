@@ -6,7 +6,7 @@ const DEV = 0;
 const PROD = 1;
 
 // Set environment here
-const ENV = PROD;
+const ENV = DEV;
 
 // TODO: move to env vars
 let envSpecificConfig = {};
