@@ -4,14 +4,12 @@
  *   Created: 12 July 2019
  */
 
+const Constants = require('./Config/Constants');
 const AWS = require("aws-sdk");
-AWS.config.loadFromPath('./Config/aws-credentials.json');  
-
+AWS.config.loadFromPath(`./Config/${Constants.AWS_CRED_FILENAME}`);  
 const docClient = new AWS.DynamoDB.DocumentClient()
 const storageClient = new AWS.S3();
-const Constants = require('./Config/Constants');
 const Stream = require('stream');      
-
 
 class OTAUpdate {
     async otaUpdateStream(res, sensorUID, build=null, version=null) {
